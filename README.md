@@ -21,8 +21,8 @@ Before running the scripts, ensure you have the following installed:
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-username/steem-broadcast-js.git
-   cd steem-broadcast-js
+   git clone https://github.com/Steemblocks/Steem-Local-Broadcast.git
+   cd Steem-Local-Broadcast
    ```
 
 2. Install the required dependencies:
