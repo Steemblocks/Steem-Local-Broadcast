@@ -75,7 +75,7 @@ async function delegateVestingShares(delegatee, steemAmount) {
 }
 
 // Example usage with command-line arguments
-const delegatee = process.argv[2]; // Delegatee username (e.g., "dhaka.witness")
+const delegatee = process.argv[2]; // Delegatee username (e.g., "dhaka.witness", "the-gorilla", "steemchiller")
 const steemAmount = parseFloat(process.argv[3]); // Amount of STEEM you want to delegate 
 
 if (!delegatee || isNaN(steemAmount)) {
