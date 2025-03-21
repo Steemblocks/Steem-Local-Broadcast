@@ -56,10 +56,10 @@ node steemDelegate.js <delegatee> <steemAmount>
 **Example**:
 
 ```bash
-node steemDelegate.js "dhaka.witness" 1000
+node steemDelegate.js "the-gorilla" 1000
 ```
 
-This delegates **1000 STEEM** worth of VESTS to the account `dhaka.witness`.
+This delegates **1000 STEEM** worth of VESTS to the account `the-gorilla`.
 
 ---
 
