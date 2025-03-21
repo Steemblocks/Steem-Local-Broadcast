@@ -1,0 +1,15 @@
+{
+  "name": "steem-broadcast",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "dhaka.witness",
+  "license": "ISC",
+  "description": "Steem Blockchain Local broadcast using steemjs",
+  "dependencies": {
+    "steem": "^0.7.11"
+  }
+}
