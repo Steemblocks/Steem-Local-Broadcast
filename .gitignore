@@ -1,3 +1,9 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore the configuration file containing sensitive data
+config.js
+
 # Ignore environment variables file
 .env
 
