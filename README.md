@@ -14,7 +14,7 @@ Before running the scripts, ensure you have the following installed:
 
 - [Node.js](https://nodejs.org/)
 - [npm](https://www.npmjs.com/)
-- Visual Code Studio
+- VS Code
 
 ## Installation
 
