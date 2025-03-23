@@ -68,7 +68,7 @@ This delegates **1000 STEEM** worth of VESTS to the account `the-gorilla`.
 To return delegated STEEM Power from another account, use the `cancelDelegation.js` script:
 
 ```bash
-node steemReturnDelegation.js <delegatee> <steemAmount>
+node cancelDelegation.js <delegatee> <steemAmount>
 ```
 
 - `<delegatee>`: The account you want to return delegation from.
@@ -77,7 +77,7 @@ node steemReturnDelegation.js <delegatee> <steemAmount>
 **Example**:
 
 ```bash
-node steemReturnDelegation.js "avro33" 0.00
+node cancelDelegation.js "avro33" 0.00
 ```
 
 This returns All the STEEM delegation from the account `avro33`. Then you can delegate again using **steemDelegation.js** your desired amount to the accounts. 
