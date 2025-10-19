@@ -1,12 +1,14 @@
 # Steem Blockchain Local Broadcast JavaScript Tools
 
-This project provides JavaScript scripts to interact with the Steem blockchain. It includes tools for delegating and returning vesting shares, using the `steem-js` library.
+This project provides JavaScript scripts to interact with the Steem blockchain. It includes tools for delegating and returning vesting shares, using the `steem-js` library with multi-node failover support.
 
 ## Features
 
-- **Delegation**: Delegate STEEM Power (VESTS) to other accounts.
-- **Return Delegation**: Return delegated STEEM Power (VESTS) from other accounts.
-- **Easy Input**: Specify amounts in STEEM instead of VESTS for user convenience.
+- **Delegation**: Delegate STEEM Power (VESTS) to other accounts
+- **Return Delegation**: Return delegated STEEM Power (VESTS) from other accounts
+- **Easy Input**: Specify amounts in STEEM instead of VESTS for user convenience
+- **Multi-Node Support**: Automatic failover between multiple Steem nodes
+- **Connection Testing**: Test connectivity to Steem nodes with detailed information
 
 ## Prerequisites
 
@@ -31,16 +33,38 @@ Before running the scripts, ensure you have the following installed:
    npm install
    ```
 
-3. Edit the `config.js` file and add your Steem account details:
+3. Edit the `config.js` file and add your Steem account details and preferred nodes:
 
-   ```
-   username: 'your-userid', // Replace with your Steem username
-   activeKey: 'your-active-key', // Replace with your active private key
+   ```javascript
+   module.exports = {
+       username: 'your-userid', // Replace with your Steem username
+       activeKey: 'your-active-key', // Replace with your active private key
+       nodes: [
+           'https://api.steemit.com',
+           'https://api.moecki.online',
+           'https://steemd.steemworld.org',
+           'https://api.steemitdev.com'
+       ],
+       currentNodeIndex: 0 // Index of the initially selected node
+   };
    ```
 
-   Replace `your-username` and `your-active-key` with your Steem account credentials.
+   Replace `your-username` and `your-active-key` with your Steem account credentials. The nodes list can be modified according to your preferences.
 
 ## Usage
+
+### Test Node Connection
+
+Before performing any operations, you can test the connection to the Steem nodes:
+
+```bash
+node testConnection.js
+```
+
+This will:
+- Connect to the first available node
+- Display detailed blockchain information
+- Automatically switch to alternative nodes if the current one fails
 
 ### Delegate STEEM Power 
 
@@ -50,8 +74,8 @@ To delegate STEEM Power to another account, use the `steemDelegate.js` script:
 node steemDelegate.js <delegatee> <steemAmount>
 ```
 
-- `<delegatee>`: The account you want to delegate to.
-- `<steemAmount>`: The amount of STEEM to delegate.
+- `<delegatee>`: The account you want to delegate to
+- `<steemAmount>`: The amount of STEEM to delegate
 
 **Example**:
 
@@ -59,9 +83,7 @@ node steemDelegate.js <delegatee> <steemAmount>
 node steemDelegate.js "the-gorilla" 1000
 ```
 
-This delegates **1000 STEEM** worth of VESTS to the account `the-gorilla`.
-
----
+This delegates **1000 STEEM** worth of VESTS to the account `the-gorilla`. If the current node fails, the script will automatically try other available nodes.
 
 ### Return Delegated STEEM Power
 
@@ -71,8 +93,8 @@ To return delegated STEEM Power from another account, use the `cancelDelegation.
 node cancelDelegation.js <delegatee> <steemAmount>
 ```
 
-- `<delegatee>`: The account you want to return delegation from.
-- `<steemAmount>`: The amount of STEEM to return.
+- `<delegatee>`: The account you want to return delegation from
+- `<steemAmount>`: The amount of STEEM to return
 
 **Example**:
 
@@ -80,7 +102,14 @@ node cancelDelegation.js <delegatee> <steemAmount>
 node cancelDelegation.js "avro33" 0.00
 ```
 
-This returns All the STEEM delegation from the account `avro33`. Then you can delegate again using **steemDelegation.js** your desired amount to the accounts. 
+This returns all STEEM delegation from the account `avro33`. After canceling, you can delegate again using `steemDelegate.js` with your desired amount.
+
+### Node Failover
+
+All scripts include automatic node failover:
+- If the primary node fails, the system automatically switches to the next available node
+- The operation is retried on the new node without user intervention
+- The process continues until a working node is found or all nodes have been tried
 
 
 ---
