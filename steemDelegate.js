@@ -1,8 +1,9 @@
 const steem = require('steem');
 const config = require('./config'); // Import the configuration
+const { tryWithNodeFailover } = require('./nodeUtils');
 
-// Set a working Steem API endpoint
-steem.api.setOptions({ url: 'https://api.steemit.com' });
+// Set initial node
+steem.api.setOptions({ url: config.nodes[config.currentNodeIndex] });
 
 // Use the username and active key from the configuration
 const username = config.username;
@@ -10,16 +11,18 @@ const activeKey = config.activeKey;
 
 // Function to fetch the current STEEM to VESTS conversion rate
 async function getSteemToVestsConversionRate() {
-    return new Promise((resolve, reject) => {
-        steem.api.getDynamicGlobalProperties((err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                const totalVestingFund = parseFloat(result.total_vesting_fund_steem.split(' ')[0]);
-                const totalVestingShares = parseFloat(result.total_vesting_shares.split(' ')[0]);
-                const conversionRate = totalVestingShares / totalVestingFund;
-                resolve(conversionRate);
-            }
+    return tryWithNodeFailover(() => {
+        return new Promise((resolve, reject) => {
+            steem.api.getDynamicGlobalProperties((err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    const totalVestingFund = parseFloat(result.total_vesting_fund_steem.split(' ')[0]);
+                    const totalVestingShares = parseFloat(result.total_vesting_shares.split(' ')[0]);
+                    const conversionRate = totalVestingShares / totalVestingFund;
+                    resolve(conversionRate);
+                }
+            });
         });
     });
 }
@@ -32,18 +35,20 @@ function convertSteemToVests(steemAmount, conversionRate) {
 
 // Function to broadcast a transaction
 async function broadcastTransaction(operation) {
-    return new Promise((resolve, reject) => {
-        steem.broadcast.send(
-            { operations: [operation], extensions: [] },
-            { active: activeKey }, // Use the active key here
-            (err, result) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(result);
+    return tryWithNodeFailover(() => {
+        return new Promise((resolve, reject) => {
+            steem.broadcast.send(
+                { operations: [operation], extensions: [] },
+                { active: activeKey }, // Use the active key here
+                (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(result);
+                    }
                 }
-            }
-        );
+            );
+        });
     });
 }
 
